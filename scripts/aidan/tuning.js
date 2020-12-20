@@ -1,14 +1,18 @@
-function TuningManager () {
+/*global
+civData, document, computer
+*/
+
+function TuningManager() {
     "use strict";
-    let self = {};
+    var self = {};
 
     self.mode = "balance";
 
     self.tune_for_food = function () {
-        let n_woodcutters = civData.woodcutter.owned;
-        let n_miners = civData.miner.owned;
-        let n_idle = civData.unemployed.owned;
-        let n_available = n_woodcutters + n_miners + n_idle;
+        var n_woodcutters = civData.woodcutter.owned,
+            n_miners = civData.miner.owned,
+            n_idle = civData.unemployed.owned,
+            n_available = n_woodcutters + n_miners + n_idle;
 
         civData.farmer.owned += n_available;
 
@@ -18,12 +22,12 @@ function TuningManager () {
     };
 
     self.tune_for_wood = function () {
-        let n_farmers_needed = computer.calculate_farmers_required();
-        let n_farmers = civData.farmer.owned;
-        let delta_farmers = n_farmers - n_farmers_needed;
-        let n_miners = civData.miner.owned;
-        let n_idle = civData.unemployed.owned;
-        let n_available = delta_farmers + n_miners + n_idle;
+        var n_farmers_needed = computer.calculate_farmers_required(),
+            n_farmers = civData.farmer.owned,
+            delta_farmers = n_farmers - n_farmers_needed,
+            n_miners = civData.miner.owned,
+            n_idle = civData.unemployed.owned,
+            n_available = delta_farmers + n_miners + n_idle;
 
         civData.woodcutter.owned += n_available;
 
@@ -33,12 +37,12 @@ function TuningManager () {
     };
 
     self.tune_for_stone = function () {
-        let n_farmers_needed = computer.calculate_farmers_required();
-        let n_farmers = civData.farmer.owned;
-        let delta_farmers = n_farmers - n_farmers_needed;
-        let n_woodcutters = civData.woodcutter.owned;
-        let n_idle = civData.unemployed.owned;
-        let n_available = delta_farmers + n_woodcutters + n_idle;
+        var n_farmers_needed = computer.calculate_farmers_required(),
+            n_farmers = civData.farmer.owned,
+            delta_farmers = n_farmers - n_farmers_needed,
+            n_woodcutters = civData.woodcutter.owned,
+            n_idle = civData.unemployed.owned,
+            n_available = delta_farmers + n_woodcutters + n_idle;
 
         civData.miner.owned += n_available;
 
@@ -48,14 +52,14 @@ function TuningManager () {
     };
 
     self.tune_for_resources = function () {
-        let n_farmers_needed = computer.calculate_farmers_required();
-        let n_farmers = civData.farmer.owned;
-        let delta_farmers = n_farmers - n_farmers_needed;
-        let n_woodcutters = civData.woodcutter.owned;
-        let n_miners = civData.miner.owned;
-        let n_idle = civData.unemployed.owned;
-        let n_available = delta_farmers + n_woodcutters + n_miners + n_idle;
-        let excess = n_available % 2;
+        var n_farmers_needed = computer.calculate_farmers_required(),
+            n_farmers = civData.farmer.owned,
+            delta_farmers = n_farmers - n_farmers_needed,
+            n_woodcutters = civData.woodcutter.owned,
+            n_miners = civData.miner.owned,
+            n_idle = civData.unemployed.owned,
+            n_available = delta_farmers + n_woodcutters + n_miners + n_idle,
+            excess = n_available % 2;
 
         n_woodcutters = Math.floor(n_available / 2);
         n_miners = Math.floor(n_available / 2);
@@ -73,16 +77,16 @@ function TuningManager () {
     };
 
     self.tune_for_balance = function () {
-        let n_farmers_needed = computer.calculate_farmers_required();
-        let n_farmers = civData.farmer.owned;
-        let delta_farmers = n_farmers - n_farmers_needed;
-        let n_woodcutters = civData.woodcutter.owned;
-        let n_miners = civData.miner.owned;
-        let n_idle = civData.unemployed.owned;
-        let n_available = delta_farmers + n_woodcutters + n_miners + n_idle;
-        let excess = n_available % 3;
+        var n_farmers_needed = computer.calculate_farmers_required(),
+            n_farmers = civData.farmer.owned,
+            delta_farmers = n_farmers - n_farmers_needed,
+            n_woodcutters = civData.woodcutter.owned,
+            n_miners = civData.miner.owned,
+            n_idle = civData.unemployed.owned,
+            n_available = delta_farmers + n_woodcutters + n_miners + n_idle,
+            gain_farmers = Math.floor(n_available / 3),
+            excess = n_available % 3;
 
-        let gain_farmers = Math.floor(n_available / 3);
         n_woodcutters = Math.floor(n_available / 3);
         n_miners = Math.floor(n_available / 3);
 
@@ -101,7 +105,7 @@ function TuningManager () {
         civData.unemployed.owned -= n_idle;
     };
 
-    self.heartbeat = function() {
+    self.heartbeat = function () {
         document.getElementById("span_tuning_span").textContent = self.mode;
         if (self.mode === "none") {
             return;
@@ -139,5 +143,6 @@ function TuningManager () {
 var tuner = new TuningManager();
 
 function doTuning() {
+    "use strict";
     tuner.heartbeat();
 }

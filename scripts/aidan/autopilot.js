@@ -1,6 +1,10 @@
-function AutopilotManager () {
+/*global
+landTotals, document, spawn
+*/
+
+function AutopilotManager() {
     "use strict";
-    let self = {};
+    var self = {};
 
     self.mode = "none";
 
@@ -9,16 +13,20 @@ function AutopilotManager () {
     self.free_land_limit = 0.9;
 
     self.build_accommodation = function () {
-        let fraction_land_used = 1.0 * landTotals.buildings / landTotals.lands
+        var landTotals = getLandTotals(),
+            fraction_land_used = landTotals.buildings / landTotals.lands;
+
         if (fraction_land_used >= self.free_land_limit) {
             return;
         }
-
-        
     };
 
-    self.heartbeat = function() {
+    self.heartbeat = function () {
         document.getElementById("span_autopilot_span").textContent = self.mode;
+
+        if (self.auto_build_accommodation) {
+            self.build_accommodation();
+        }
 
         if (self.auto_populate === true) {
             spawn(Infinity);
@@ -36,5 +44,6 @@ function AutopilotManager () {
 var autopilot = new AutopilotManager();
 
 function doAutopilot() {
+    "use strict";
     autopilot.heartbeat();
 }
